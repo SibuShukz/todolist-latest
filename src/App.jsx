@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 //import './App.css'
 import Navbar from './components/Navbar'
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
 
@@ -13,9 +14,23 @@ function App() {
   
  }
 
+ const handleCheckbox= (e) => { 
+  console.log(e,e.target)
+    let id = e.target.name;
+    console.log(`this id is ${id}`)
+    let index=todos.findIndex(item=>{
+      return item.id === id;
+    })
+    console.log(index)
+    let newTodos = [...todos];
+   newTodos[index].isCompleted = !newTodos[index].isCompleted;
+   setTodos(newTodos)
+
+  }
+
  const handleAdd = () => {
-  setTodos([...todos,{todo,isCompleted: false}])
-  setTodo("")
+  setTodos([...todos,{id:uuidv4(), todo,isCompleted: false}])
+  setTodo("") 
 }
 
 const handleChange = (e) => {
@@ -40,12 +55,12 @@ const handleDelete = () => {
       '>Add</button>
         </div>
 
-
+ 
         <h2 className='text-lg font-bold'>yours todos</h2>
         <div className="todos">
         {todos.map(item => {
-           return <div  key={todo} className="todo flex w-1/4 my-3 justify-between">
-           <input type="checkbox" value={todo.isCompleted} name="" id="" />
+           return <div  key={item.id} className="todo flex w-1/4 my-3 justify-between">
+           <input name={item.id} onChange={handleCheckbox} type="checkbox" value={item.isCompleted}  id="" />
             <div className={item.isCompleted?"line-through" :""}>{item.todo}</div>
             <div className="buttons">
               <button  onClick={handleEdit} className=' bg-violet-800 hover:bg-violet-950 p-2 py-1 text-white rounded-md mx-1 font-bold text-sm
